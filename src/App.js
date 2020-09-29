@@ -1,26 +1,97 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { v4 as uuidv4 } from "uuid";
+import "./App.css";
+import ContactList from "./components/ContactList/ContactList";
+import ContactForm from "./components/ContactForm/ContactForm";
+import Filter from "./components/Filter/Filter";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  state = {
+    contacts: [],
+    filter: "",
+    name: "",
+    number: "",
+  };
+
+  componentDidMount() {
+    const localStorageContacts = localStorage.getItem("contacts");
+    if (localStorageContacts) {
+      this.setState({ contacts: JSON.parse(localStorageContacts) });
+    }
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.contacts !== this.state.contacts) {
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+    }
+  }
+
+  addContact = (name, number) => {
+    const { contacts } = this.state;
+
+    if (contacts.some((contact) => contact.name === name)) {
+      return alert(`${name} is already in contacts`);
+    } else {
+      const contact = {
+        id: uuidv4(),
+        name: name,
+        number: number,
+      };
+      this.setState((prevState) => {
+        return {
+          contacts: [...prevState.contacts, contact],
+        };
+      });
+    }
+  };
+
+  deleteContact = (contactId) => {
+    this.setState((prevState) => {
+      return {
+        contacts: prevState.contacts.filter((contact) => contact.id !== contactId),
+      };
+    });
+  };
+
+  changeFilter = (filter) => {
+    this.setState({ filter });
+  };
+
+  getVisibleContacts = () => {
+    const { contacts, filter } = this.state;
+    return contacts.filter((contact) =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    );
+  };
+
+  render() {
+    const { filter, contacts } = this.state;
+    const visibleContacts = this.getVisibleContacts();
+
+    return (
+      <div className="App">
+        <h1>Phonebook</h1>
+        <ContactForm onAddContact={this.addContact} />
+
+        {contacts.length > 0 && (
+          <section>
+            <h2>Contacts</h2>
+
+            {contacts.length > 1 && (
+              <Filter value={filter} onChangeFilter={this.changeFilter} />
+            )}
+            {contacts.length > 1 && visibleContacts.length === 0 && (
+              <p>no results were found for your search</p>
+            )}
+
+            <ContactList
+              contacts={visibleContacts}
+              onDeleteContact={this.deleteContact}
+            />
+          </section>
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;
