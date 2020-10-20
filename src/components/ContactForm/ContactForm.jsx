@@ -33,20 +33,22 @@ class ContactForm extends Component {
   render() {
     return (
       <form onSubmit={this.handleSubmit} className={styles.phonebookForm}>
-        <label htmlFor="">
+        <label htmlFor="formName">
           Name
           <input
             required
+            id="formName"
             type="text"
             name="name"
             value={this.state.name}
             onChange={(e) => this.handleChange(e, "name")}
           />
         </label>
-        <label htmlFor="">
+        <label htmlFor="formNumber">
           Number
           <input
-            type="tel"
+            id="formNumber"
+            type="number"
             name="number"
             value={this.state.number}
             required
