@@ -1,9 +1,11 @@
 import React, { Component } from "react";
 import { v4 as uuidv4 } from "uuid";
-import "./App.css";
+
 import ContactList from "./components/ContactList/ContactList";
 import ContactForm from "./components/ContactForm/ContactForm";
 import Filter from "./components/Filter/Filter";
+
+import "./App.css";
 
 class App extends Component {
   state = {
@@ -29,14 +31,14 @@ class App extends Component {
     if (contacts.some((contact) => contact.name === name)) {
       return alert(`${name} is already in contacts`);
     } else {
-      const contact = {
+      const newContact = {
         id: uuidv4(),
         name: name,
         number: number,
       };
       this.setState((prevState) => {
         return {
-          contacts: [...prevState.contacts, contact],
+          contacts: [...prevState.contacts, newContact],
         };
       });
     }
@@ -45,7 +47,9 @@ class App extends Component {
   deleteContact = (contactId) => {
     this.setState((prevState) => {
       return {
-        contacts: prevState.contacts.filter((contact) => contact.id !== contactId),
+        contacts: prevState.contacts.filter(
+          (contact) => contact.id !== contactId
+        ),
       };
     });
   };
