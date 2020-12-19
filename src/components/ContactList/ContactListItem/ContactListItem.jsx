@@ -1,18 +1,16 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const ContactsListItem = ({ name, number, onDeleteContact }) => {
-  return (
-    <li>
-      <p>
-        {name} {number}
-      </p>
-      <button type="button" onClick={onDeleteContact}>
-        delete
-      </button>
-    </li>
-  );
-};
+const ContactsListItem = ({ name, number, onDeleteContact }) => (
+  <li>
+    <p>
+      {name} {number}
+    </p>
+    <button type="button" onClick={onDeleteContact}>
+      delete
+    </button>
+  </li>
+);
 
 ContactsListItem.defaultProps = {
   name: "anonymous",

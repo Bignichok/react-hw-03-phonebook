@@ -2,20 +2,18 @@ import React from "react";
 import styles from "./Filter.module.css";
 import PropTypes from "prop-types";
 
-const Filter = ({ filter, onChangeFilter }) => {
-  return (
-    <div className={styles.wrp}>
-      <label>
-        Find Contacts by name
-        <input
-          type="text"
-          value={filter}
-          onChange={(e) => onChangeFilter(e.target.value)}
-        />
-      </label>
-    </div>
-  );
-};
+const Filter = ({ filter, onChangeFilter }) => (
+  <div className={styles.wrp}>
+    <label>
+      Find Contacts by name
+      <input
+        type="text"
+        value={filter}
+        onChange={({ target }) => onChangeFilter(target.value)}
+      />
+    </label>
+  </div>
+);
 
 Filter.defaultProps = {
   onChangeFilter: () => {},
